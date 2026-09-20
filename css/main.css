@@ -1,0 +1,197 @@
+/* ============================================================
+   main.css — Fundacion visual del proyecto.
+   Paleta: verde botánico profundo + dorados cálidos (coherente con
+   "flores amarillas"), tipografía serif cálida para titulares
+   (Fraunces) + sans humanista para UI/cuerpo (Work Sans).
+   ============================================================ */
+
+:root {
+  /* Color */
+  --color-bg-deep: #16210f;
+  --color-bg-deep-2: #0e160a;
+  --color-paper: #fbf3de;
+  --color-paper-soft: #f3e8c9;
+  --color-gold: #f2b705;
+  --color-gold-soft: #f6d368;
+  --color-ink: #241d0d;
+  --color-text-light: #fbf7ec;
+  --color-text-muted: rgba(251, 247, 236, 0.72);
+  --color-focus: #9fd3ff;
+
+  /* Tipografia */
+  --font-display: 'Fraunces', 'Georgia', serif;
+  --font-body: 'Work Sans', system-ui, sans-serif;
+
+  /* Espaciado */
+  --space-1: 0.5rem;
+  --space-2: 1rem;
+  --space-3: 1.75rem;
+  --space-4: 2.75rem;
+
+  /* Touch targets */
+  --tap-min: 44px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  overflow-x: hidden;
+  background: var(--color-bg-deep);
+  color: var(--color-text-light);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+button {
+  font-family: inherit;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* ------------------------------------------------------------
+   Sistema de escenas
+   Cada <section data-scene> ocupa toda la pantalla; el cambio entre
+   ellas lo maneja js/app.js (crossfade). Aquí solo se define el
+   layout base común a todas.
+   ------------------------------------------------------------ */
+.scene {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-2);
+  text-align: center;
+  opacity: 0;
+}
+
+.scene[hidden] {
+  display: none;
+}
+
+/* FIX DE BUG: varios elementos definen su propio "display" (flex, etc.)
+   para cuando están visibles, y eso pisaba el atributo `hidden` nativo
+   (que normalmente pone display:none) porque una regla de autor con
+   igual especificidad siempre gana sobre la hoja de estilos del
+   navegador. Resultado real que esto causaba: el mensaje de "nombre no
+   reconocido" se veía desde el inicio sin haber escrito nada, y el
+   mensaje final invisible (opacity:0) seguía ocupando toda la pantalla
+   y bloqueando clics sobre el botón "+1 flor". Esta regla de más alta
+   especificidad garantiza que `hidden` SIEMPRE oculte de verdad. */
+[hidden] {
+  display: none !important;
+}
+
+/* ------------------------------------------------------------
+   Tipografía compartida
+   ------------------------------------------------------------ */
+.museum__text,
+.transition__text,
+.ramo__label,
+.finale__text,
+.final__text {
+  font-family: var(--font-body);
+  font-size: clamp(1rem, 2.4vw, 1.2rem);
+  line-height: 1.5;
+  color: var(--color-text-muted);
+  max-width: 34ch;
+}
+
+/* ------------------------------------------------------------
+   Botones
+   Un solo estilo primario (dorado, protagonista) y uno secundario
+   (contorno suave) — se evita el kit genérico de "una tarjeta con
+   sombra por todo".
+   ------------------------------------------------------------ */
+.btn {
+  appearance: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 0.9rem 2rem;
+  border-radius: 999px;
+  min-height: var(--tap-min);
+  min-width: var(--tap-min);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 3px;
+}
+
+.btn--primary {
+  background: var(--color-gold);
+  color: var(--color-ink);
+  box-shadow: 0 6px 18px rgba(242, 183, 5, 0.28);
+}
+
+.btn--primary:hover {
+  background: var(--color-gold-soft);
+}
+
+.btn--secondary {
+  background: transparent;
+  color: var(--color-text-light);
+  border: 1.5px solid rgba(251, 247, 236, 0.4);
+}
+
+.btn--secondary:hover {
+  border-color: var(--color-gold);
+  color: var(--color-gold-soft);
+}
+
+/* ------------------------------------------------------------
+   Escena 2 — transición (muy simple a propósito: es un puente breve)
+   ------------------------------------------------------------ */
+.scene--transition {
+  background: linear-gradient(160deg, var(--color-bg-deep) 0%, #2a3a17 100%);
+  cursor: pointer;
+}
+
+.transition__text {
+  font-family: var(--font-display);
+  font-size: clamp(1.3rem, 4vw, 1.9rem);
+  color: var(--color-gold-soft);
+}
+
+/* ------------------------------------------------------------
+   Accesibilidad: respeta "reducir movimiento" desactivando
+   transiciones largas/decorativas donde no sea crítico.
+   ------------------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

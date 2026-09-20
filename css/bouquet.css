@@ -1,0 +1,217 @@
+/* ============================================================
+   bouquet.css — Escenas 3+4+5: nombre, construcción y exploración
+   ============================================================ */
+
+.scene--ramo {
+  background: radial-gradient(ellipse at 50% 100%, #2c3a18 0%, var(--color-bg-deep) 60%, var(--color-bg-deep-2) 100%);
+  justify-content: flex-start;
+  padding-top: var(--space-4);
+  /* Red de seguridad: si en una pantalla Muy corta no cupiera todo,
+     se puede desplazar en vez de dejar los botones inalcanzables. */
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.ramo__intro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  max-width: 30ch;
+}
+
+.ramo__label {
+  color: var(--color-text-muted);
+}
+
+.ramo__input-label {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--color-gold-soft);
+}
+
+.ramo__input {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  text-align: center;
+  padding: 0.6rem 1.2rem;
+  border-radius: 16px;
+  border: none;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  min-height: var(--tap-min);
+  width: min(80vw, 320px);
+}
+
+.ramo__input:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+/* Contenedor del ramo: ahora es un lienzo de proporción FIJA (igual a
+   los PNG reales, 1024x1536) donde la base y las 6 capas se superponen
+   exactas — ya no hay posiciones calculadas, todo viene del diseño. */
+.ramo__container {
+  position: relative;
+  /* El ancho manda (el alto sale del aspect-ratio, que NO se puede
+     romper o se desalinean capas y hotspots). Se limita el ancho para
+     que el alto nunca empuje los botones fuera del viewport: se reserva
+     espacio para intro + botones + paddings, y lo que sobre es ramo.
+     Bug reportado: con el ancho fijo anterior, "Listo" quedaba debajo
+     de la pantalla y no aparecía. */
+  width: min(78vw, 360px, max(120px, calc((100vh - 360px) * 0.6667)));
+  width: min(78vw, 360px, max(120px, calc((100dvh - 360px) * 0.6667)));
+  aspect-ratio: 1024 / 1536;
+  flex: 0 0 auto;
+}
+
+.ramo__base,
+.ramo__layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.ramo__base {
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
+.ramo__base--visible {
+  opacity: 1;
+}
+
+.ramo__layer {
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.7s ease;
+}
+
+.ramo__layer--visible {
+  opacity: 1;
+}
+
+/* Emojis de relleno: solo se colocan en zonas sin flores reales (ver
+   js/emojiSafeZones.js), así que aquí no hace falta cuidar superposición. */
+.ramo__emoji {
+  position: absolute;
+  width: 12%;
+  transform: translate(-50%, -50%) scale(var(--emoji-scale, 1));
+  z-index: 2;
+  pointer-events: none;
+}
+
+.ramo__emoji img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Hotspot invisible sobre una flor individual del ramo — se agrega
+   recién al confirmar el nombre (ver app.js). Sin marca visual propia
+   (el descubrimiento debe sentirse natural, no señalado de antemano). */
+.ramo__hotspot {
+  position: absolute;
+  z-index: 3;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.ramo__hotspot:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 3px;
+}
+
+/* Pequeño respiro visual una vez descubierta, sutil (no un sello). */
+.ramo__hotspot--discovered {
+  box-shadow: 0 0 22px 10px rgba(242, 183, 5, 0.35);
+  border-radius: 50%;
+}
+
+/* ------------------------------------------------------------
+   Estilos compartidos con la Escena final (ramo de clics), que sigue
+   usando el sistema algorítmico anterior — ver bouquet.js
+   renderSimpleCluster. No tocar sin revisar esa escena también.
+   ------------------------------------------------------------ */
+.flower {
+  position: absolute;
+  width: 14.06%;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: default;
+  transform: translate(-50%, -50%) rotate(var(--rot, 0deg)) scale(0);
+  opacity: 0;
+  transition: transform 0.55s cubic-bezier(0.2, 0.9, 0.3, 1.2), opacity 0.4s ease, filter 0.2s ease;
+}
+
+.flower img {
+  width: 100%;
+  height: auto;
+  display: block;
+  transform: scaleX(var(--flip, 1));
+  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.25));
+}
+
+.flower--visible {
+  transform: translate(-50%, -50%) rotate(var(--rot, 0deg)) scale(var(--scale, 1));
+  opacity: 1;
+}
+
+.ramo__hint {
+  color: var(--color-text-muted);
+  max-width: 32ch;
+}
+
+/* ------------------------------------------------------------
+   Breve pantalla de carga (se muestra al confirmar ciertos nombres
+   antes de revelar "Explorar" — ver js/app.js). Cubre la escena
+   mientras se prepara el ramo.
+   ------------------------------------------------------------ */
+.ramo__loading {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-4) var(--space-2);
+  text-align: center;
+  background: radial-gradient(ellipse at 50% 100%, #2c3a18 0%, var(--color-bg-deep) 60%, var(--color-bg-deep-2) 100%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.ramo__loading--visible {
+  opacity: 1;
+}
+
+.ramo__loading-spinner {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: 3px solid rgba(242, 183, 5, 0.25);
+  border-top-color: var(--color-gold);
+  animation: ramo-spin 0.9s linear infinite;
+}
+
+@keyframes ramo-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.ramo__loading-text {
+  font-family: var(--font-display);
+  font-size: clamp(1.1rem, 3vw, 1.4rem);
+  color: var(--color-gold-soft);
+  max-width: 30ch;
+}

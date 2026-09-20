@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'" />
+<meta name="referrer" content="no-referrer" />
+<title>Flores Amarillas 2026</title>
+<meta name="description" content="Vuelve este 21 de septiembre." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+
+<link rel="stylesheet" href="css/main.css" />
+<link rel="stylesheet" href="css/museum.css" />
+<link rel="stylesheet" href="css/bouquet.css" />
+<link rel="stylesheet" href="css/interactions.css" />
+<link rel="stylesheet" href="css/final.css" />
+</head>
+<body>
+
+<!-- ============================================================
+     ESCENA 1 — MUSEO / INTRODUCCIÓN
+     ============================================================ -->
+<section class="scene scene--museum" data-scene="museum" aria-label="Introducción">
+  <div class="museum__frame">
+    <img class="museum__sticker" src="assets/images/flor.png" alt="Sticker histórico de la tradición de Flores Amarillas" />
+  </div>
+  <p class="museum__text">Y pensar que solo mandé un sticker hace dos años.</p>
+  <button type="button" class="btn btn--primary museum__continue">Siguiente</button>
+</section>
+
+<!-- ============================================================
+     ESCENA 2 — TRANSICIÓN A 2026
+     (avanza sola después de unos segundos, o al tocar la pantalla)
+     ============================================================ -->
+<section class="scene scene--transition" data-scene="transition" aria-label="Transición">
+  <p class="transition__text">Y como esto ya se volvió tradición para mí...</p>
+</section>
+
+<!-- ============================================================
+     ESCENAS 3 + 4 + 5 — NOMBRE, CONSTRUCCIÓN Y EXPLORACIÓN DEL RAMO
+     (una sola sección visual continua — ver nota en js/app.js)
+     ============================================================ -->
+<section class="scene scene--ramo" data-scene="ramo" aria-label="Tu ramo">
+
+  <div class="ramo__intro">
+    <p class="ramo__label">¿Para quién son estas flores?</p>
+    <label class="ramo__input-label" for="name-input">Tu nombre</label>
+    <input
+      id="name-input"
+      class="ramo__input"
+      type="text"
+      autocomplete="given-name"
+      maxlength="40"
+      placeholder="Escribe aquí..."
+    />
+  </div>
+
+  <!-- Se muestra SOLO si el nombre escrito no está en data/people.js.
+       Bloquea el paso: no se genera ningún ramo para nombres no reconocidos. -->
+  <div class="ramo__rejection" hidden>
+    <p class="ramo__rejection-text">Ese nombre no me suena... Esto no es para ti</p>
+    <button type="button" class="btn btn--secondary ramo__retry">Tal vez me equivoqué, intenta de nuevo</button>
+  </div>
+
+  <div class="ramo__container" aria-label="Tu ramo de flores"></div>
+
+  <!-- Breve pantalla de carga antes de "Explorar". Por ahora solo se
+       activa para JACOB (ver js/app.js -> initRamo). -->
+  <div class="ramo__loading" hidden aria-live="polite">
+    <div class="ramo__loading-spinner" aria-hidden="true"></div>
+    <p class="ramo__loading-text">¿Hola? ¿Por qué te dio curiosidad el mío? Okey, bueno, hice esta parte pensando que probablemente nadie la verá, entonces no mentí ni escondí nada. Suerte, aunque dudo que alguien lo vea.</p>
+  </div>
+
+  <button type="button" class="btn btn--primary ramo__listo" hidden>Listo</button>
+  <button type="button" class="btn btn--primary ramo__explorar" hidden>Explorar</button>
+
+  <p class="ramo__hint" hidden>No todo lo que hay acá es decoración, revisa.</p>
+  <button type="button" class="btn btn--secondary ramo__continuar" hidden>Continuar</button>
+</section>
+
+<!-- ============================================================
+     ESCENAS 6 + 7 + 8 FUSIONADAS — "el gran final"
+     Todo ocurre en capas sobre el mismo fondo, sin cambiar de pantalla:
+     - Fondo: canvas de flores que empieza a gotear desde el principio
+       y se va acumulando (sin desaparecer) hasta llenar la pantalla.
+     - Medio: el ramo que se arma a punta de clics ("+1 flor").
+     - Encima al final: el mensaje de cierre, sobre la montaña de flores.
+     ============================================================ -->
+<section class="scene scene--finale" data-scene="finale" aria-label="Recibe flores">
+  <canvas class="finale__canvas"></canvas>
+
+  <div class="finale__foreground">
+    <p class="finale__text">Bueno, una más.</p>
+    <div class="finale__bouquet" aria-label="Ramo que estás armando"></div>
+    <p class="finale__counter" aria-live="polite">0 / 0</p>
+    <button type="button" class="btn btn--primary finale__button">+1 flor</button>
+  </div>
+
+  <div class="finale__message" hidden>
+    <!-- Contador de personas que escribieron "jacob". Solo se muestra en
+         PC (ver css/final.css). Sin backend, cuenta por dispositivo. -->
+    <button type="button" class="finale__visitas" title="Personas que han visto esta versión (solo Jacob)">Vistas: 0</button>
+    <!-- Imagen final opcional: reemplaza o elimina si no se usa -->
+    <!-- <img class="final__image" src="assets/images/final.png" alt="Flores amarillas" /> -->
+    <p class="final__text">Otro año, donde las recuerdo con lo que me gusta hacer. Espero le guste, y si por alguna razón no tienen a nadie que les dé flores, al menos siempre estaré yo, que aunque no sea lo mismo, siempre será especial.</p>
+  </div>
+</section>
+
+<!-- Audio de fondo: "Flores Amarillas", en bucle desde la Escena 3.
+     PENDIENTE: falta que el usuario suba el archivo real. -->
+<audio class="bg-audio" src="assets/audio/flores-amarillas.mp3" loop preload="auto"></audio>
+
+<!-- Modal reutilizado por las flores especiales -->
+<div class="modal-root" aria-hidden="true"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script type="module" src="js/app.js"></script>
+</body>
+</html>

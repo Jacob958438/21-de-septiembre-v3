@@ -1,0 +1,54 @@
+/* ============================================================
+   final.css — Escena 8: pantalla final
+   ============================================================ */
+
+.final__text {
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 4.5vw, 2.1rem);
+  color: var(--color-gold-soft);
+  max-width: 26ch;
+}
+
+.final__image {
+  width: min(70vw, 280px);
+  border-radius: 16px;
+}
+
+/* ------------------------------------------------------------
+   Contador de vistas de Jacob: botón en la esquina superior derecha
+   de la pantalla final. SOLO se muestra en PC (puntero fino + hover);
+   en táctil/móvil queda oculto, que es donde se usa la experiencia.
+   ------------------------------------------------------------ */
+.finale__visitas {
+  display: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .finale__visitas {
+    position: absolute;
+    top: var(--space-2);
+    right: var(--space-2);
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    padding: 0.4rem 0.8rem;
+    border-radius: 999px;
+    border: 1.5px solid rgba(242, 183, 5, 0.55);
+    background: rgba(14, 22, 10, 0.55);
+    color: var(--color-gold-soft);
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .finale__visitas:hover {
+    border-color: var(--color-gold);
+    color: var(--color-gold);
+  }
+
+  .finale__visitas:focus-visible {
+    outline: 3px solid var(--color-focus);
+    outline-offset: 2px;
+  }
+}

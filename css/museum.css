@@ -1,0 +1,28 @@
+/* ============================================================
+   museum.css — Escena 1: Museo / introducción
+   ============================================================ */
+
+.scene--museum {
+  background: radial-gradient(circle at 50% 30%, #223018 0%, var(--color-bg-deep) 55%, var(--color-bg-deep-2) 100%);
+}
+
+.museum__frame {
+  width: min(60vw, 260px);
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.museum__sticker {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transform: scale(0.02);
+  opacity: 0;
+  filter: drop-shadow(0 10px 30px rgba(242, 183, 5, 0.25));
+}
+
+.museum__continue {
+  margin-top: var(--space-2);
+}

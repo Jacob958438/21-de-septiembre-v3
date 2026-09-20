@@ -1,0 +1,160 @@
+/* ============================================================
+   interactions.css — Modal de flores especiales, Escena 6 y Escena 7
+   ============================================================ */
+
+/* ---------------- Modal ---------------- */
+.modal-root {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(14, 22, 10, 0.72);
+  padding: var(--space-2);
+  z-index: 50;
+}
+
+.modal-root.modal--open {
+  display: flex;
+}
+
+.modal__card {
+  position: relative;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  border-radius: 20px;
+  padding: var(--space-4) var(--space-3) var(--space-3);
+  max-width: min(90vw, 420px);
+  max-height: 80vh;
+  overflow-y: auto;
+  text-align: left;
+}
+
+.modal__close {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.6rem;
+  width: var(--tap-min);
+  height: var(--tap-min);
+  border: none;
+  background: transparent;
+  font-size: 1.6rem;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--color-ink);
+}
+
+.modal__close:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.modal__text {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  line-height: 1.6;
+}
+
+.modal__hint {
+  font-size: 0.85rem;
+  color: #5a5238;
+  margin-bottom: var(--space-1);
+}
+
+.modal__body img,
+.modal__body video {
+  width: 100%;
+  border-radius: 12px;
+}
+
+.modal__body audio {
+  width: 100%;
+}
+
+/* ---------------- Escena 3-5: rechazo de nombre no reconocido ---------------- */
+.ramo__rejection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  max-width: 30ch;
+}
+
+.ramo__rejection-text {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  color: var(--color-gold-soft);
+}
+
+/* ---------------- Escenas 6+7+8 fusionadas ("el gran final") ---------------- */
+.scene--finale {
+  padding: 0;
+  background: var(--color-bg-deep);
+  justify-content: flex-end;
+  overflow: hidden;
+}
+
+.finale__canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  z-index: 1;
+}
+
+.finale__foreground {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-2) var(--space-4);
+  width: 100%;
+}
+
+.finale__text {
+  font-family: var(--font-body);
+  font-size: clamp(1rem, 2.4vw, 1.2rem);
+  color: var(--color-text-muted);
+  max-width: 34ch;
+  text-align: center;
+}
+
+/* El ramo de clics reutiliza el mismo look que el ramo de la Escena 4
+   (flores densas tipo domo), pero en un contenedor más pequeño. */
+.finale__bouquet {
+  position: relative;
+  width: min(70vw, 280px);
+  height: min(30vh, 240px);
+}
+
+.finale__bouquet .flower {
+  width: 30%;
+}
+
+.finale__counter {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  color: var(--color-gold-soft);
+}
+
+/* Mensaje final: aparece encima de la montaña de flores acumulada. */
+.finale__message {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-2);
+  background: rgba(14, 22, 10, 0.35);
+  opacity: 0;
+  transition: opacity 1.2s ease;
+  overflow-y: auto;
+}
+
+.finale__message--visible {
+  opacity: 1;
+}
